@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export {Home};
+export default Home;

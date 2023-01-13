@@ -1,17 +1,20 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 
 const ListItem = ({singleMedia}) => {
   const item = singleMedia;
   return (
-    <TouchableOpacity>
-      <Image
-        style={{width: 100, height: 100}}
-        source={{uri: uploadsUrl + item.thumbnails?.w160}}
-      ></Image>
-      <View>
-        <Text>{item.title}</Text>
+    <TouchableOpacity style={styles.row}>
+      <View style={styles.box}>
+        <Image
+          style={styles.image}
+          source={{uri: uploadsUrl + item.thumbnails?.w160}}
+        ></Image>
+      </View>
+      <View style={styles.box}>
+        <Text style={styles.listTitle}>{item.title}</Text>
         <Text>{item.description}</Text>
       </View>
     </TouchableOpacity>
@@ -43,4 +46,4 @@ ListItem.propTypes = {
   singleMedia: PropTypes.object,
 };
 
-export {ListItem};
+export default ListItem;

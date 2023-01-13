@@ -1,6 +1,6 @@
 import {FlatList} from 'react-native';
 import {useMedia} from '../hooks/ApiHooks';
-import {ListItem} from './ListItem';
+import ListItem from './ListItem';
 
 const List = () => {
   const {mediaArray} = useMedia();
@@ -13,4 +13,4 @@ const List = () => {
   );
 };
 
-export {List};
+export default List;
