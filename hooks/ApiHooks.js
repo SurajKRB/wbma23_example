@@ -27,4 +27,16 @@ const useMedia = () => {
   return {mediaArray};
 };
 
-export {useMedia};
+const useAuthentication = () => {
+  const postLogin = async () => {
+    // TODO: post login api
+  };
+};
+
+const useUser = () => {
+  const checkUser = async () => {
+    // TODO:
+  };
+};
+
+export {useMedia, useAuthentication, useUser};
