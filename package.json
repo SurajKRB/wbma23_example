@@ -13,8 +13,13 @@
     "eslint-plugin-react-native": "^4.0.0",
     "expo": "~47.0.12",
     "expo-status-bar": "~1.4.2",
+    "feather-icons": "^4.29.0",
     "react": "18.1.0",
-    "react-native": "0.70.5"
+    "react-native": "0.70.5",
+    "react-native-feather": "^1.1.2",
+    "react-native-svg": "13.4.0",
+    "react-native-vector-icons": "^9.2.0",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",

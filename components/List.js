@@ -22,7 +22,7 @@ const List = () => {
     loadMedia();
   }, []);
 
-  console.log('hahaha: ', mediaArray);
+  // console.log('hahaha: ', mediaArray);
 
   return (
     <FlatList
