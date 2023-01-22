@@ -9,6 +9,7 @@ const doFetch = async (url, options) => {
     const messge = json.error ? `${json.message}: ${json.error}` : json.message;
     throw new Error(messge || response.statusText);
   }
+
   return json;
 };
 
@@ -35,6 +36,7 @@ const useMedia = () => {
   useEffect(() => {
     loadMedia();
   }, []);
+
   return {mediaArray};
 };
 
@@ -74,7 +76,25 @@ const useUser = () => {
       throw new Error('getUserByToken: ' + error.message);
     }
   };
-  return {getUserByToken};
+
+  const postUser = async (userData) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    };
+
+    try {
+      const loginResult = await doFetch(baseUrl + 'users', options);
+      return loginResult;
+    } catch (error) {
+      throw new Error('postUser: ', error.message);
+    }
+  };
+
+  return {getUserByToken, postUser};
 };
 
 export {useMedia, useAuthentication, useUser};
