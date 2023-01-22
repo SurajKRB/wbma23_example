@@ -12,11 +12,11 @@ const Login = ({navigation}) => {
 
   const logIn = async () => {
     console.log('Button pressed');
-    setIsLoggedIn(true);
+    // setIsLoggedIn(true);
     const data = {username: 'Suraj', password: 'hahahaha'};
     try {
       const loginResult = await postLogin(data);
-      // console.log('Login: ', loginResult);
+      // console.log('loginResult.token: ', loginResult.token);
 
       await AsyncStorage.setItem('userToken', loginResult.token);
     } catch (error) {
@@ -28,7 +28,7 @@ const Login = ({navigation}) => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       const userData = await getUserByToken(userToken);
-      console.log('checkToken: ', userData);
+      // console.log('checkToken: ', userData);
       setIsLoggedIn(true);
     } catch (error) {
       console.log('no valid token available');
