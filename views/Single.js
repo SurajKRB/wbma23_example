@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 
 const Single = ({route}) => {
-  // console.log(route.params);
   const {title, description, filename, time_added: timeAdded} = route.params;
   return (
     <SafeAreaView style={styles.container}>
