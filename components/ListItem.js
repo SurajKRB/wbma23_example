@@ -1,49 +1,41 @@
-import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
+import {Avatar, Button, ListItem as RneuiListItem} from '@rneui/themed';
 
 const ListItem = ({singleMedia, navigation}) => {
   const item = singleMedia;
   return (
-    <TouchableOpacity
-      style={styles.row}
-      onPress={() => {
-        navigation.navigate('Single', item);
-      }}
-    >
-      <View style={styles.box}>
-        <Image
-          style={styles.image}
-          source={{uri: uploadsUrl + item.thumbnails?.w160}}
-        ></Image>
-      </View>
-      <View style={styles.box}>
-        <Text style={styles.listTitle}>{item.title}</Text>
-        <Text>{item.description}</Text>
-      </View>
-    </TouchableOpacity>
+    <RneuiListItem bottomDivider>
+      <Avatar rounded source={{uri: uploadsUrl + item.thumbnails?.w160}} />
+      <RneuiListItem.Content style={styles.title_box}>
+        <RneuiListItem.Title>{item.title}</RneuiListItem.Title>
+        <RneuiListItem.Subtitle style={styles.sub_title}>
+          {item.description}
+        </RneuiListItem.Subtitle>
+      </RneuiListItem.Content>
+      <RneuiListItem.Content>
+        <Button
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate('Single', item);
+          }}
+        >
+          View
+        </Button>
+      </RneuiListItem.Content>
+    </RneuiListItem>
   );
 };
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    backgroundColor: '#ccc',
-    marginBottom: 10,
+  button: {},
+  title_box: {
+    width: 250,
   },
-  box: {
-    flex: 1,
-    padding: 10,
-  },
-  image: {
-    flex: 1,
-    minHeight: 100,
-  },
-  listTitle: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    paddingBottom: 15,
+  sub_title: {
+    width: 150,
+    height: 20,
   },
 });
 
