@@ -18,14 +18,14 @@ const LoginForm = (props) => {
       username: '',
       password: '',
     },
+    mode: 'onBlur',
   });
 
   const logIn = async (loginData) => {
     console.log('Button pressed: ', loginData);
-    // const data = {username: 'Suraj', password: 'hahahaha'};
+
     try {
       const loginResult = await postLogin(loginData);
-      // console.log('loginResult.token: ', loginResult.token);
 
       await AsyncStorage.setItem('userToken', loginResult.token);
       setUser(loginResult.user);
@@ -63,7 +63,13 @@ const LoginForm = (props) => {
 
       <Controller
         control={control}
-        rules={{required: true, minLength: 5}}
+        rules={{
+          required: {value: true, message: 'This is required.'},
+          minLength: {
+            value: 3,
+            message: 'Username min length is 3 characters.',
+          },
+        }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
             placeholder="Pasword"
@@ -71,11 +77,12 @@ const LoginForm = (props) => {
             onChangeText={onChange}
             value={value}
             secureTextEntry={true}
+            errorMessage={errors.username && errors.username.message}
           />
         )}
         name="password"
       />
-      {errors.password && <Text>password (min. 5 chars) is required</Text>}
+
       <Button title="Sign in!" onPress={handleSubmit(logIn)} />
     </View>
   );
