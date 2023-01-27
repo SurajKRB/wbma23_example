@@ -5,7 +5,6 @@ import {uploadsUrl} from '../utils/variables';
 import {Card, Icon, ListItem} from '@rneui/themed';
 
 const Single = ({route}) => {
-  // console.log(route.params);
   const {title, description, filename, time_added: timeAdded} = route.params;
   return (
     <Card>
