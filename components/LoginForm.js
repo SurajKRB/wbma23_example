@@ -1,9 +1,10 @@
 import React, {useContext} from 'react';
-import {Button, Text, TextInput, View} from 'react-native';
+import {View} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import {useAuthentication} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Controller, useForm} from 'react-hook-form';
+import {Button, Text, Input} from '@rneui/themed';
 
 const LoginForm = (props) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -17,14 +18,14 @@ const LoginForm = (props) => {
       username: '',
       password: '',
     },
+    mode: 'onBlur',
   });
 
   const logIn = async (loginData) => {
     console.log('Button pressed: ', loginData);
-    // const data = {username: 'Suraj', password: 'hahahaha'};
+
     try {
       const loginResult = await postLogin(loginData);
-      // console.log('loginResult.token: ', loginResult.token);
 
       await AsyncStorage.setItem('userToken', loginResult.token);
       setUser(loginResult.user);
@@ -40,37 +41,48 @@ const LoginForm = (props) => {
       <Text>Login Form</Text>
       <Controller
         control={control}
-        rules={{required: true, minLength: 3}}
+        rules={{
+          required: {value: true, message: 'This is required.'},
+          minLength: {
+            value: 3,
+            message: 'Username min length is 3 characters.',
+          },
+        }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="User Name"
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            autoCapitalize="none"
+            errorMessage={errors.username && errors.username.message}
           />
         )}
         name="username"
       />
-      {errors.username?.type === 'required' && <Text>is required</Text>}
-      {errors.username?.type === 'minLength' && (
-        <Text>min length is 3 character</Text>
-      )}
 
       <Controller
         control={control}
-        rules={{required: true, minLength: 5}}
+        rules={{
+          required: {value: true, message: 'This is required.'},
+          minLength: {
+            value: 3,
+            message: 'Username min length is 3 characters.',
+          },
+        }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Pasword"
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             secureTextEntry={true}
+            errorMessage={errors.username && errors.username.message}
           />
         )}
         name="password"
       />
-      {errors.password && <Text>password (min. 5 chars) is required</Text>}
+
       <Button title="Sign in!" onPress={handleSubmit(logIn)} />
     </View>
   );
