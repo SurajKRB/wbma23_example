@@ -66,8 +66,8 @@ const LoginForm = (props) => {
         rules={{
           required: {value: true, message: 'This is required.'},
           minLength: {
-            value: 3,
-            message: 'Username min length is 3 characters.',
+            value: 5,
+            message: 'Password min length is 5 characters.',
           },
         }}
         render={({field: {onChange, onBlur, value}}) => (

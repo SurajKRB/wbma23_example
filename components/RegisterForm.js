@@ -23,6 +23,7 @@ const RegisterForm = (props) => {
   });
 
   const register = async (registerData) => {
+    delete registerData.confirmPassword;
     console.log('Registering: ', registerData);
 
     try {
