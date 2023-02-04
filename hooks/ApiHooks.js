@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
-import {baseUrl} from '../utils/variables';
+import {appId, baseUrl} from '../utils/variables';
 
 const doFetch = async (url, options) => {
   const response = await fetch(url, options);
@@ -20,8 +20,11 @@ const useMedia = () => {
 
   const loadMedia = async () => {
     try {
-      const response = await fetch(baseUrl + 'media');
-      const json = await response.json();
+      // const response = await fetch(baseUrl + 'media');
+      // const json = await response.json();
+
+      const json = await useTag().getFilesByTag(appId);
+
       const media = await Promise.all(
         json.map(async (file) => {
           const fileResponse = await fetch(baseUrl + 'media/' + file.file_id);
@@ -135,7 +138,25 @@ const useTag = () => {
       throw new Error('getFilesByTag, ' + error.message);
     }
   };
-  return {getFilesByTag};
+
+  const postTags = async (data, token) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+
+    try {
+      return await doFetch(baseUrl + 'tags', options);
+    } catch (error) {
+      throw new Error('postTag: ', error.message);
+    }
+  };
+
+  return {getFilesByTag, postTags};
 };
 
 export {useMedia, useAuthentication, useUser, useTag};
