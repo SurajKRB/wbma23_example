@@ -127,7 +127,17 @@ const useUser = () => {
     }
   };
 
-  return {getUserByToken, postUser, checkUserName};
+  const getUserById = async (id, token) => {
+    try {
+      return await doFetch(baseUrl + 'users/' + id, {
+        headers: {'x-access-token': token},
+      });
+    } catch (error) {
+      throw new Error('getUserById: ' + error.message);
+    }
+  };
+
+  return {getUserByToken, postUser, checkUserName, getUserById};
 };
 
 const useTag = () => {
@@ -135,7 +145,7 @@ const useTag = () => {
     try {
       return await doFetch(baseUrl + 'tags/' + tag);
     } catch (error) {
-      throw new Error('getFilesByTag, ' + error.message);
+      throw new Error('getFilesByTag: ' + error.message);
     }
   };
 
@@ -159,4 +169,58 @@ const useTag = () => {
   return {getFilesByTag, postTags};
 };
 
-export {useMedia, useAuthentication, useUser, useTag};
+const useFavourite = () => {
+  const postFavourite = async (fileId, token) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({file_id: fileId}),
+    };
+
+    try {
+      return await doFetch(baseUrl + 'favourites', options);
+    } catch (error) {
+      throw new Error('postFavourite: ', error.message);
+    }
+  };
+
+  const getFavouritesByFileId = async (fileId) => {
+    try {
+      return await doFetch(baseUrl + 'favourites/file/' + fileId);
+    } catch (error) {
+      throw new Error('getFavouritesByFileId: ' + error.message);
+    }
+  };
+
+  const getFavouritesByUser = async (token) => {
+    // TODO:
+  };
+
+  const deleteFavourite = async (fileId, token) => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    try {
+      return await doFetch(baseUrl + 'favourites/file/' + fileId, options);
+    } catch (error) {
+      throw new Error('deleteFavourite: ' + error.message);
+    }
+  };
+
+  return {
+    postFavourite,
+    getFavouritesByUser,
+    getFavouritesByFileId,
+    deleteFavourite,
+  };
+};
+
+export {useMedia, useAuthentication, useUser, useTag, useFavourite};
