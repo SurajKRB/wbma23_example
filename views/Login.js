@@ -16,9 +16,7 @@ import {Button, Text} from '@rneui/themed';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn, setuser} = useContext(MainContext);
-
   const {getUserByToken} = useUser();
-
   const [toggleFrom, setToggleFrom] = useState(true);
 
   const checkToken = async () => {

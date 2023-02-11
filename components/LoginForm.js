@@ -15,8 +15,8 @@ const LoginForm = (props) => {
     formState: {errors},
   } = useForm({
     defaultValues: {
-      username: '',
-      password: '',
+      username: 'Suraj',
+      password: 'hahahaha',
     },
     mode: 'onBlur',
   });

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
@@ -6,6 +6,8 @@ import {Card, Icon, ListItem} from '@rneui/themed';
 import {Video} from 'expo-av';
 import {useFavourite, useUser} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MainContext} from '../contexts/MainContext';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const Single = ({route}) => {
   const {
@@ -15,17 +17,17 @@ const Single = ({route}) => {
     time_added: timeAdded,
     media_type: type,
     user_id: userId,
-    screenshot,
     file_id: id,
   } = route.params;
 
   const video = useRef(null);
   const [owner, setOwner] = useState({});
   const [likes, setLikes] = useState([]);
-  const [userLikesIt, setUserLikesIt] = useState(true);
+  const [userLikesIt, setUserLikesIt] = useState({});
   const {getUserById} = useUser();
   const {getFavouritesByFileId, postFavourite, deleteFavourite} =
     useFavourite();
+  const {user} = useContext(MainContext);
 
   const getOwner = async () => {
     try {
@@ -41,8 +43,12 @@ const Single = ({route}) => {
     try {
       const likes = await getFavouritesByFileId(id);
       setLikes(likes);
-
-      // TODO:
+      const likedUsersId = likes.map((item) => item.user_id);
+      if (likedUsersId.includes(user.user_id)) {
+        setUserLikesIt(true);
+      } else {
+        setUserLikesIt(false);
+      }
     } catch (error) {
       throw new Error('getLikes: ', error.message);
     }
@@ -70,9 +76,49 @@ const Single = ({route}) => {
     }
   };
 
+  const unlock = async () => {
+    try {
+      await ScreenOrientation.unlockAsync();
+    } catch (error) {
+      throw new Error('unlock', error.message);
+    }
+  };
+
+  const lock = async () => {
+    try {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    } catch (error) {
+      throw new Error('lock', error.message);
+    }
+  };
+
+  const showVideoInFullScreen = async () => {
+    try {
+      await Video.presentFullScreenPlayer();
+    } catch (error) {
+      throw new Error('showVideoInFullScreen', error.message);
+    }
+  };
+
   useEffect(() => {
     getOwner();
     getLikes();
+    unlock();
+
+    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
+      console.log('orientation', evt);
+      if (evt.orientationInfo.orientation > 2) {
+        // show video in fullscreen
+        if (video.current) showVideoInFullScreen();
+      }
+    });
+
+    return () => {
+      ScreenOrientation.removeOrientationChangeListener(orientSub);
+      lock();
+    };
   }, []);
 
   return (
@@ -96,14 +142,14 @@ const Single = ({route}) => {
               console.log(error);
             }}
             isLooping
-            usePoster
-            posterSource={{uri: uploadsUrl + screenshot}}
+            // usePoster
+            // posterSource={{uri: uploadsUrl + screenshot}}
           />
         )}
 
         <Card.Divider />
         {description && (
-          <ListItem>
+          <ListItem onPress={showVideoInFullScreen()}>
             <Text>{description}</Text>
           </ListItem>
         )}
